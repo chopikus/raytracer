@@ -6,22 +6,21 @@ import org.slf4j.LoggerFactory;
 public class App 
 {    
     static Logger logger = LoggerFactory.getLogger(App.class);
-    
+
     public static void main( String[] args )
     {
-        int imageWidth = 256;
-        int imageHeight = 256;
-        int colorResolution = 255;
-
-        System.out.printf("P3\n%d %d\n255\n", imageWidth, imageHeight);
+        var imageWidth = 256;
+        var imageHeight = 256;
+        var image = new Image(imageWidth, imageHeight);
         for (int y=0; y<imageHeight; y++) {
             for (int x=0; x<imageWidth; x++) {
                 var r = (double) x / (imageWidth - 1);
                 var g = (double) y / (imageHeight - 1);
                 var b = 0.0;
-
-                System.out.printf("%d %d %d\n", (int) (r * colorResolution), (int) (g * colorResolution), (int) (b * colorResolution));
+                
+                image.setPixel(x, y, r, g, b);
             }
         }
+        image.show();
     }
 }
