@@ -19,8 +19,8 @@ public class Image {
      * Throws ArrayIndexOutOfBoundsException if (x, y) is out of bounds.
      * Throws IllegalArgumentException if r, g, b are not in the range [0.0, 1.0].
     */
-    public void setPixel(int x, int y, float r, float g, float b) {
-        var color = new Color(r, g, b);
+    public void setPixel(int x, int y, double r, double g, double b) {
+        var color = new Color((float) r, (float) g, (float) b);
         buf.setRGB(x, y, color.getRGB());
     };
 

@@ -14,9 +14,9 @@ public class App
         var image = new Image(imageWidth, imageHeight);
         for (int x=0; x<imageWidth; x++) {
             for (int y=0; y<imageHeight; y++) {
-                var r = (float) x / (imageWidth - 1);
-                var g = (float) y / (imageHeight - 1);
-                var b = 0.0f;
+                var r = (double) x / (imageWidth - 1);
+                var g = (double) y / (imageHeight - 1);
+                var b = 0.0;
                 image.setPixel(x, y, r, g, b);
             }
         }
