@@ -12,15 +12,14 @@ public class App
         var imageWidth = 256;
         var imageHeight = 256;
         var image = new Image(imageWidth, imageHeight);
-        for (int y=0; y<imageHeight; y++) {
-            for (int x=0; x<imageWidth; x++) {
-                var r = (double) x / (imageWidth - 1);
-                var g = (double) y / (imageHeight - 1);
-                var b = 0.0;
-                
+        for (int x=0; x<imageWidth; x++) {
+            for (int y=0; y<imageHeight; y++) {
+                var r = (float) x / (imageWidth - 1);
+                var g = (float) y / (imageHeight - 1);
+                var b = 0.0f;
                 image.setPixel(x, y, r, g, b);
             }
         }
-        image.show();
+        image.write("target/output.png", "png");
     }
 }
