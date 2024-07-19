@@ -6,7 +6,21 @@ import org.slf4j.LoggerFactory;
 public class App {
     static Logger logger = LoggerFactory.getLogger(App.class);
 
+    public static Boolean hitSphere(Point sphereCenter, double sphereRadius, Ray r) {
+        var orig = r.origin();
+        var dir = r.direction();
+        var A = dir.lenSquared();
+        var B = sphereCenter.subtract(orig).scalarProduct(dir) * -2;
+        var C = sphereCenter.subtract(orig).lenSquared() - sphereRadius*sphereRadius;
+        var D = B*B - 4*A*C;
+        return (D >= 0);
+    }
+
     public static Color rayColor(Ray r) {
+        if (hitSphere(new Point(0.0, 0.0, -1.0), 0.5, r)) {
+            return new Color(1.0, 0.0, 0.0);
+        }
+
         Vec3 unitDir = r.direction().unit();
         /* unitDir.y() can be from -1 to 1. */
         var a = (unitDir.y + 1.0) / 2.0;
@@ -21,7 +35,7 @@ public class App {
     public static void main(String[] args) {
         /* Image units */
         var aspectRatio = 16.0 / 9.0;
-        var imageWidth = 400;
+        var imageWidth = 500;
         var imageHeight = (int) (imageWidth / aspectRatio);
 
         /* Geometric units */
@@ -44,6 +58,8 @@ public class App {
                               .subtract(v.divide(2))
                               .subtract(h.divide(2))
                               .toPoint();
+        
+        System.out.println(viewportStart.x + " " + viewportStart.y + " " + viewportStart.z);
 
         Point p00 = viewportStart
                     .add(dv.divide(2))

@@ -43,6 +43,10 @@ public class Vec3 {
         return this.divide(this.len());
     }
 
+    double scalarProduct(Vec3 v) {
+        return x * v.x + y * v.y + z * v.z;
+    }
+
     double len() {
         return Math.sqrt(this.lenSquared());
     }
