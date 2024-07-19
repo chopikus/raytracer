@@ -1,18 +1,10 @@
 package dev.chopikus.raytracer;
 
-public class Ray {
-    public Point origin;
-    public Point direction;
-
-    public Ray(Point origin, Point direction) {
-        this.origin = origin;
-        this.direction = direction;
-    }
-
+public record Ray(Point origin, Vec3 direction) {
     public Point at(double t) {
         return direction
-                .multiply(t)
-                .add(origin)
-                .toPoint();
+               .multiply(t)
+               .add(origin)
+               .toPoint();
     }
 }

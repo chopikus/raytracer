@@ -8,7 +8,7 @@
   <name>raytracer</name>
   <url>http://maven.apache.org</url>
   <properties>
-    <maven.compiler.release>11</maven.compiler.release>
+    <maven.compiler.release>16</maven.compiler.release>
     <exec.mainClass>dev.chopikus.raytracer.App</exec.mainClass>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

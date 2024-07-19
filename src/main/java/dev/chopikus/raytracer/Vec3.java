@@ -39,6 +39,10 @@ public class Vec3 {
         return this.multiply(1/t);
     }
 
+    Vec3 unit() {
+        return this.divide(this.len());
+    }
+
     double len() {
         return Math.sqrt(this.lenSquared());
     }
