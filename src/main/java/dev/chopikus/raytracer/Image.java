@@ -1,6 +1,5 @@
 package dev.chopikus.raytracer;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,14 +13,14 @@ public class Image {
         buf = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
     }
 
-    /* Set a pixel (x, y) color to (r, g, b).
-     * r, g, b must be in the range [0.0, 1.0].
+    /* Set a pixel (x, y) color.
+     * color.r(), .g(), .b() must be in the range [0.0, 1.0].
      * Throws ArrayIndexOutOfBoundsException if (x, y) is out of bounds.
-     * Throws IllegalArgumentException if r, g, b are not in the range [0.0, 1.0].
+     * Throws IllegalArgumentException if color.r(), .g(), .b() are not in the range [0.0, 1.0].
     */
-    public void setPixel(int x, int y, double r, double g, double b) {
-        var color = new Color((float) r, (float) g, (float) b);
-        buf.setRGB(x, y, color.getRGB());
+    public void setPixel(int x, int y, Color color) {
+        var awtColor = new java.awt.Color((float) color.r(), (float) color.g(), (float) color.b());
+        buf.setRGB(x, y, awtColor.getRGB());
     };
 
     /* Writes the Image to a file under a path name.

@@ -6,6 +6,18 @@ import org.slf4j.LoggerFactory;
 public class App {
     static Logger logger = LoggerFactory.getLogger(App.class);
 
+    public static Color rayColor(Ray r) {
+        Vec3 unitDir = r.direction().unit();
+        /* unitDir.y() can be from -1 to 1. */
+        var a = (unitDir.y + 1.0) / 2.0;
+        var startColor = new Color(1.0, 1.0, 1.0);
+        var endColor = new Color(0.5, 0.7, 1.0);
+
+        return startColor
+               .multiply(1.0 - a)
+               .add(endColor.multiply(a));
+    }
+
     public static void main(String[] args) {
         /* Image units */
         var aspectRatio = 16.0 / 9.0;
@@ -50,6 +62,7 @@ public class App {
                                     .subtract(cameraCenter);
 
                 Ray r = new Ray(pixelCenter, rayDirection);
+                image.setPixel(x, y, rayColor(r));
             }
         }
         image.write("target/output.png", "png");
