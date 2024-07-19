@@ -2,7 +2,8 @@
 
 Project in progress!
 
-![output](https://github.com/user-attachments/assets/6432eb3e-0a78-4cbc-a342-d0a4a1b53251)
+![output](https://github.com/user-attachments/assets/0dff2839-65bd-4c8b-9a1c-ba93f6bb6076)
+
 
 
 ## Commands
