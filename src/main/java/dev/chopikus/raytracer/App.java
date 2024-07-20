@@ -6,19 +6,35 @@ import org.slf4j.LoggerFactory;
 public class App {
     static Logger logger = LoggerFactory.getLogger(App.class);
 
-    public static Boolean hitSphere(Point sphereCenter, double sphereRadius, Ray r) {
+    public static double hitSphere(Point sphereCenter, double sphereRadius, Ray r) {
         var orig = r.origin();
         var dir = r.direction();
+        var OC = sphereCenter.subtract(orig);
+
         var A = dir.lenSquared();
-        var B = sphereCenter.subtract(orig).scalarProduct(dir) * -2;
-        var C = sphereCenter.subtract(orig).lenSquared() - sphereRadius*sphereRadius;
+        var B = OC.scalarProduct(dir) * -2.0;
+        var C = OC.lenSquared() - (sphereRadius*sphereRadius);
         var D = B*B - 4*A*C;
-        return (D >= 0);
+
+        if (D < 0) {
+            return -1.0;
+        }
+        return (-B - Math.sqrt(D)) / (2.0 * A);
     }
 
     public static Color rayColor(Ray r) {
-        if (hitSphere(new Point(0.0, 0.0, -1.0), 0.5, r)) {
-            return new Color(1.0, 0.0, 0.0);
+        var spherePoint = new Point(0.0, 0.0, -1.0);
+        var sphereRadius = 0.5;
+        var t = hitSphere(spherePoint, sphereRadius, r);
+
+        if (t > 0.0) {
+            Vec3 N = r.at(t)
+                      .subtract(spherePoint)
+                      .unit();
+            
+            /* Since N is normalized, each coordinate can be from -1 to 1. */
+            return new Color(N.x + 1.0, N.y + 1.0, N.z + 1.0)
+                       .divide(2.0);
         }
 
         Vec3 unitDir = r.direction().unit();
@@ -35,7 +51,7 @@ public class App {
     public static void main(String[] args) {
         /* Image units */
         var aspectRatio = 16.0 / 9.0;
-        var imageWidth = 500;
+        var imageWidth = 400;
         var imageHeight = (int) (imageWidth / aspectRatio);
 
         /* Geometric units */
@@ -69,15 +85,13 @@ public class App {
         var image = new Image(imageWidth, imageHeight);
         for (int x = 0; x < imageWidth; x++) {
             for (int y = 0; y < imageHeight; y++) {
-                Point pixelCenter = p00
+                Vec3 rayDirection = p00
                                     .add(dh.multiply(x))
                                     .add(dv.multiply(y))
-                                    .toPoint();
-
-                Vec3 rayDirection = pixelCenter
                                     .subtract(cameraCenter);
-
-                Ray r = new Ray(pixelCenter, rayDirection);
+                
+                /* There was a bug in the past creating a new Ray(pixelCenter, rayDirection) */
+                Ray r = new Ray(cameraCenter, rayDirection);
                 image.setPixel(x, y, rayColor(r));
             }
         }

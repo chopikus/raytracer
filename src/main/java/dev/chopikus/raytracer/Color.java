@@ -12,4 +12,8 @@ public record Color(double r, double g, double b) {
     public Color multiply(double c) {
         return new Color(r * c, g * c, b * c);
     }
+
+    public Color divide(double c) {
+        return new Color(r / c, g / c, b / c);
+    }
 }
