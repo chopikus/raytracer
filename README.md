@@ -2,9 +2,7 @@
 
 Project in progress!
 
-![output](https://github.com/user-attachments/assets/0dff2839-65bd-4c8b-9a1c-ba93f6bb6076)
-
-
+![output](https://github.com/user-attachments/assets/5dc4b449-8418-42cb-9572-eb750fa3de7d)
 
 ## Commands
 Build: `mvn clean compile assembly:single`
