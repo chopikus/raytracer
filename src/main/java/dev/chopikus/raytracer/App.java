@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import dev.chopikus.raytracer.geom.*;
 import dev.chopikus.raytracer.hit.*;
-import dev.chopikus.raytracer.render.*;
+import dev.chopikus.raytracer.util.*;
 
 public class App {
     static Logger logger = LoggerFactory.getLogger(App.class);

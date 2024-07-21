@@ -1,4 +1,4 @@
-package dev.chopikus.raytracer.render;
+package dev.chopikus.raytracer.util;
 
 public record Color(double r, double g, double b) {
     public Color add(Color another) {

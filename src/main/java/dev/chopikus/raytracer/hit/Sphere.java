@@ -9,9 +9,8 @@ public record Sphere(Point center, double radius) implements Hittable {
     public Optional<HitRecord> hit(Ray r, double tMin, double tMax) {
         var orig = r.origin();
         var dir = r.direction();
-        var OC = this.center
-                     .subtract(orig);
-
+        var OC = this.center.subtract(orig);
+ 
         var A = dir.lenSquared();
         var B = OC.scalarProduct(dir) * -2.0;
         var C = OC.lenSquared() - (this.radius*this.radius);
