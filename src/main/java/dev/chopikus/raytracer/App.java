@@ -1,34 +1,25 @@
 package dev.chopikus.raytracer;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import dev.chopikus.raytracer.geom.*;
+import dev.chopikus.raytracer.hit.*;
+import dev.chopikus.raytracer.render.*;
 
 public class App {
     static Logger logger = LoggerFactory.getLogger(App.class);
 
-    public static double hitSphere(Point sphereCenter, double sphereRadius, Ray r) {
-        var orig = r.origin();
-        var dir = r.direction();
-        var OC = sphereCenter.subtract(orig);
+    static Sphere sphere = new Sphere(new Point(0.0, 0.0, -1.0), 0.5);
 
-        var A = dir.lenSquared();
-        var B = OC.scalarProduct(dir) * -2.0;
-        var C = OC.lenSquared() - (sphereRadius*sphereRadius);
-        var D = B*B - 4*A*C;
-
-        if (D < 0) {
-            return -1.0;
-        }
-        return (-B - Math.sqrt(D)) / (2.0 * A);
-    }
-
-    public static Color rayColor(Ray r) {
+    static Color rayColor(Ray r) {
         var spherePoint = new Point(0.0, 0.0, -1.0);
-        var sphereRadius = 0.5;
-        var t = hitSphere(spherePoint, sphereRadius, r);
-
-        if (t > 0.0) {
-            Vec3 N = r.at(t)
+        Optional<HitRecord> hr = sphere.hit(r, -10000, 10000);
+        
+        if (hr.isPresent()) {
+            Vec3 N = r.at(hr.get().t())
                       .subtract(spherePoint)
                       .unit();
             
@@ -75,8 +66,6 @@ public class App {
                               .subtract(h.divide(2))
                               .toPoint();
         
-        System.out.println(viewportStart.x + " " + viewportStart.y + " " + viewportStart.z);
-
         Point p00 = viewportStart
                     .add(dv.divide(2))
                     .add(dh.divide(2))

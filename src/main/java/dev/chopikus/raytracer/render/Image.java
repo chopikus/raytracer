@@ -1,4 +1,4 @@
-package dev.chopikus.raytracer;
+package dev.chopikus.raytracer.render;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

@@ -1,4 +1,4 @@
-package dev.chopikus.raytracer;
+package dev.chopikus.raytracer.geom;
 
 public class Vec3 {
     public double x, y, z;
@@ -15,43 +15,43 @@ public class Vec3 {
         this.z = z;
     }
 
-    Point toPoint() {
+    public Point toPoint() {
         return new Point(x, y, z);
     }
 
-    Vec3 minus() {
+    public Vec3 minus() {
         return new Vec3(-x, -y, -z);
     }
 
-    Vec3 add(Vec3 v) {
+    public Vec3 add(Vec3 v) {
         return new Vec3(x + v.x, y + v.y, z + v.z);
     }
 
-    Vec3 subtract(Vec3 v) {
+    public Vec3 subtract(Vec3 v) {
         return new Vec3(x - v.x, y - v.y, z - v.z);
     }
 
-    Vec3 multiply(double t) {
+    public Vec3 multiply(double t) {
         return new Vec3(x * t, y * t, z * t);
     }
 
-    Vec3 divide(double t) {
+    public Vec3 divide(double t) {
         return this.multiply(1/t);
     }
 
-    Vec3 unit() {
+    public Vec3 unit() {
         return this.divide(this.len());
     }
 
-    double scalarProduct(Vec3 v) {
+    public double scalarProduct(Vec3 v) {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    double len() {
+    public double len() {
         return Math.sqrt(this.lenSquared());
     }
 
-    double lenSquared() {
+    public double lenSquared() {
         return x*x + y*y + z*z;
     }
 }
