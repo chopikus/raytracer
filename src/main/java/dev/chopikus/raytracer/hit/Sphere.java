@@ -3,10 +3,11 @@ package dev.chopikus.raytracer.hit;
 import java.util.Optional;
 
 import dev.chopikus.raytracer.geom.*;
+import dev.chopikus.raytracer.util.*;
 
 public record Sphere(Point center, double radius) implements Hittable {
     @Override
-    public Optional<HitRecord> hit(Ray r, double tMin, double tMax) {
+    public Optional<HitRecord> hit(Ray r, Interval i) {
         var orig = r.origin();
         var dir = r.direction();
         var OC = this.center.subtract(orig);
@@ -27,15 +28,18 @@ public record Sphere(Point center, double radius) implements Hittable {
         var t2 = (-B + sqrtD) / (2 * A);
         
         double t;
-        if (t1 > tMin && t1 < tMax)
+        if (i.surrounds(t1))
             t = t1;
-        else if (t2 > tMin && t2 < tMax)
+        else if (i.surrounds(t2))
             t = t2;
         else
             return Optional.empty();
         
         var p = r.at(t);
-        var normal = p.subtract(center).unit();
-        return Optional.of(new HitRecord(p, normal, t));
+        var outwardNormal = p.subtract(center).unit();
+        boolean frontFace = r.direction().scalarProduct(outwardNormal) <= 0;
+        var normal = frontFace ? outwardNormal : outwardNormal.minus();
+
+        return Optional.of(new HitRecord(p, normal, t, frontFace));
     }
 }
