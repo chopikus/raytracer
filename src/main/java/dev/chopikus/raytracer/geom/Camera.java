@@ -1,6 +1,7 @@
 package dev.chopikus.raytracer.geom;
 
 import java.util.Optional;
+import java.util.Random;
 
 import dev.chopikus.raytracer.hit.*;
 import dev.chopikus.raytracer.util.*;
@@ -12,8 +13,11 @@ public class Camera {
     private Point p00;
     private Vec3 dh;
     private Vec3 dv;
+    private int pixelSamples;
+    private Random random = new Random();
 
-    public Camera(double aspectRatio, int imageWidth) {
+    public Camera(double aspectRatio, int imageWidth, int pixelSamples) {
+        this.pixelSamples = pixelSamples;
         this.imageWidth = imageWidth;
         imageHeight = (int) (imageWidth / aspectRatio);
 
@@ -66,16 +70,26 @@ public class Camera {
 
     public void render(Hittable world) {
         var image = new Image(imageWidth, imageHeight);
+
         for (int x = 0; x < imageWidth; x++) {
             for (int y = 0; y < imageHeight; y++) {
-                Vec3 rayDirection = p00
-                                    .add(dh.multiply(x))
-                                    .add(dv.multiply(y))
+                var pixelColor = new Color(0.0, 0.0, 0.0);
+
+                for (int sample = 0; sample < pixelSamples; sample++) {
+                    double offsetX = random.nextDouble() - 0.5;
+                    double offsetY = random.nextDouble() - 0.5;
+
+                    Vec3 rayDirection = p00
+                                    .add(dh.multiply(x + offsetX))
+                                    .add(dv.multiply(y + offsetY))
                                     .subtract(center);
-                
-                /* There was a bug in the past creating a new Ray(pixelCenter, rayDirection) */
-                Ray r = new Ray(center, rayDirection);
-                image.setPixel(x, y, rayColor(r, world));
+                    
+                    Ray r = new Ray(center, rayDirection);
+                    pixelColor = pixelColor.add(rayColor(r, world));
+                }
+
+                pixelColor = pixelColor.divide(pixelSamples);
+                image.setPixel(x, y, pixelColor);
             }
         }
         image.write("target/output.png", "png");
