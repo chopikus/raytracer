@@ -77,28 +77,31 @@ public class Camera {
                .add(endColor.multiply(a));
     }
 
+    public Color renderPixel(Hittable world, int x, int y) {
+        var pixelColor = new Color(0.0, 0.0, 0.0);
+
+        for (int sample = 0; sample < pixelSamples; sample++) {
+            double offsetX = random.nextDouble() - 0.5;
+            double offsetY = random.nextDouble() - 0.5;
+
+            Vec3 rayDirection = p00
+                            .add(dh.multiply(x + offsetX))
+                            .add(dv.multiply(y + offsetY))
+                            .subtract(center);
+            
+            Ray r = new Ray(center, rayDirection);
+            pixelColor = pixelColor.add(rayColor(r, world, this.depth));
+        }
+
+        return pixelColor.divide(pixelSamples);
+    }
+
     public void render(Hittable world) {
         var image = new Image(imageWidth, imageHeight);
 
         for (int x = 0; x < imageWidth; x++) {
             for (int y = 0; y < imageHeight; y++) {
-                var pixelColor = new Color(0.0, 0.0, 0.0);
-
-                for (int sample = 0; sample < pixelSamples; sample++) {
-                    double offsetX = random.nextDouble() - 0.5;
-                    double offsetY = random.nextDouble() - 0.5;
-
-                    Vec3 rayDirection = p00
-                                    .add(dh.multiply(x + offsetX))
-                                    .add(dv.multiply(y + offsetY))
-                                    .subtract(center);
-                    
-                    Ray r = new Ray(center, rayDirection);
-                    pixelColor = pixelColor.add(rayColor(r, world, this.depth));
-                }
-
-                pixelColor = pixelColor.divide(pixelSamples);
-                image.setPixel(x, y, pixelColor);
+                image.setPixel(x, y, renderPixel(world, x, y));
             }
         }
         image.write("target/output.png", "png");
