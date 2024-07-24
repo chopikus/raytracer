@@ -17,7 +17,7 @@ public class App {
         hittables.add(new Sphere(new Point(0.0, -100.5, -1.0), 100.0));
         HittableList world = new HittableList(hittables);
 
-        new Camera(16.0 / 9.0, 1000, 250)
+        new Camera(16.0 / 9.0, 400, 200)
             .render(world);
     }
 }

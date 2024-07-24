@@ -15,6 +15,7 @@ public class Camera {
     private Vec3 dv;
     private int pixelSamples;
     private Random random = new Random();
+    private int depth = 10;
 
     public Camera(double aspectRatio, int imageWidth, int pixelSamples) {
         this.pixelSamples = pixelSamples;
@@ -48,20 +49,28 @@ public class Camera {
                     .toPoint();
     }
 
-    public Color rayColor(Ray r, Hittable world) {
-        Optional<HitRecord> hr = world.hit(r, new Interval(0.0, Double.POSITIVE_INFINITY));
+    public Color rayColor(Ray r, Hittable world, int depth) {
+        if (depth <= 0) {
+            return new Color(0.0, 0.0, 0.0);
+        }
+
+        Optional<HitRecord> hr = world.hit(r, new Interval(0.001, Double.POSITIVE_INFINITY));
         
         if (hr.isPresent()) {
             var normal = hr.get().normal();
-            return new Color(normal.x + 1.0, normal.y + 1.0, normal.z + 1.0)
-                       .divide(2.0);
+            var randomVector = Vec3.randomOnUnitHemisphere(random, normal);
+            
+            return rayColor(new Ray(hr.get().p(), randomVector), world, depth-1)
+                    .divide(2.0);
+            /*return new Color(normal.x + 1.0, normal.y + 1.0, normal.z + 1.0)
+                       .divide(2.0);*/
         }
 
         Vec3 unitDir = r.direction().unit();
         /* unitDir.y() can be from -1 to 1. */
         var a = (unitDir.y + 1.0) / 2.0;
         var startColor = new Color(1.0, 1.0, 1.0);
-        var endColor = new Color(0.5, 0.7, 1.0);
+        var endColor = new Color(1.0, 0.0, 0.0);
 
         return startColor
                .multiply(1.0 - a)
@@ -85,7 +94,7 @@ public class Camera {
                                     .subtract(center);
                     
                     Ray r = new Ray(center, rayDirection);
-                    pixelColor = pixelColor.add(rayColor(r, world));
+                    pixelColor = pixelColor.add(rayColor(r, world, this.depth));
                 }
 
                 pixelColor = pixelColor.divide(pixelSamples);
