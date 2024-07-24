@@ -6,7 +6,7 @@ Project in progress!
 
 Diffuse material:
 
-![output](https://github.com/user-attachments/assets/2bd7eca6-5a8b-4661-87a9-10ce57186f13)
+![output](https://github.com/user-attachments/assets/77a209f1-a65d-4f55-9a23-df1591f771de)
 
 
 
