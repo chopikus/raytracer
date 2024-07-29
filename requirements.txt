@@ -1,1 +1,4 @@
+mypy==1.11.0
+mypy-extensions==1.0.0
 pillow==10.4.0
+typing_extensions==4.12.2

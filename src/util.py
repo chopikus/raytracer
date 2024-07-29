@@ -25,7 +25,7 @@ class Color:
         return Color(self.r / another, self.g / another, self.b / another)
 
 class Image:
-    _img: PILImage
+    _img: PILImage.Image
 
     def __init__(self, width: int, height: int) -> None:
         self._img = PILImage.new('RGB', (width, height))
