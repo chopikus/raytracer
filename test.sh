@@ -1,2 +1,2 @@
 #!/bin/bash
-mypy src/test.py --check-untyped-defs && python3 -m unittest discover -s src/
+mypy src/test.py --enable-incomplete-feature=NewGenericSyntax --check-untyped-defs && python3 -m unittest discover -s src/

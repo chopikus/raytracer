@@ -1,2 +1,2 @@
 #!/bin/bash
-mypy . && python3 src/main.py
+mypy --enable-incomplete-feature=NewGenericSyntax . && python3 src/main.py

@@ -1,6 +1,8 @@
 from util import *
 from hit import *
 
+FARAWAY = 1.0e9
+
 class Camera:
     image_width: int
     image_height: int
@@ -35,15 +37,13 @@ class Camera:
     def ray_color(self, r: Ray, world: Hittable, depth: int) -> Color:
         if depth <= 0:
             return Color(0.0, 0.0, 0.0)
+        
+        
 
         hr: Optional[HitRecord] = world.hit(r, Interval(0.0001, float('inf')))
         if hr is not None:
             normal = hr.normal
-            random_vector = Vec3.random_on_unit_hemisphere(normal)
-            
-            return self.ray_color(Ray(hr.p, random_vector), world, depth - 1) \
-                   * 1/2
-            # return 1/2 * Color(normal.x + 1.0, normal.y + 1.0, normal.z + 1.0)
+            return Color(normal.x + 1.0, normal.y + 1.0, normal.z + 1.0) / 2
 
         unit_dir: Vec3 = r.direction.unit()
 
