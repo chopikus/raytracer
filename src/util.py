@@ -1,5 +1,5 @@
-from PIL import Image as PILImage
 from __future__ import annotations
+from PIL import Image as PILImage
 from dataclasses import dataclass
 
 @dataclass

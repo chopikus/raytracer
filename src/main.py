@@ -1,19 +1,12 @@
-from util import Image, Color
-
-def drawImage() -> None:
-    width = 200
-    height = 200
-    img = Image(width, height)
-
-    for x in range(width):
-        for y in range(height):
-            r = x / (width - 1)
-            g = y / (height - 1)
-            b = 0.0
-            c = Color(r, g, b)
-            img.set_pixel(x, y, c)
-    
-    img.save("output.png")
+from util import *
+from camera import *
+from sphere import *
 
 if __name__ == '__main__':
-    drawImage()
+    hittables = []
+    hittables.append(Sphere(center=Point(0.0, 0.0, -1.0), radius=0.5))
+    hittables.append(Sphere(center=Point(0.0, -100.5, -1.0), radius=100.0))
+
+    world = HittableList(hittables)
+    camera = Camera(16.0 / 9.0, 400, 10)
+    camera.render(world)
