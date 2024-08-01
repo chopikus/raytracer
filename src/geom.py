@@ -10,6 +10,7 @@ class Vec3:
     z: float = 0.0
 
     """Returns the uniformly distributed vector on a unit sphere.
+       The returned vector is a unit vector.
     """
     @staticmethod
     def random_on_unit_sphere() -> Vec3:
@@ -21,15 +22,17 @@ class Vec3:
             l = sqrt(x*x + y*y + z*z)
         return Vec3(x/l, y/l, z/l)
     
-    """Returns the uniformly distributed vector on a unit sphere in the same hemisphere as `normal` vector.
+    """Returns the uniformly distributed vector on a unit sphere in the same hemisphere as vector `v`.
+       Note: `v` is not required to be a unit vector.
+       The returned vector is a unit vector.
     """
     @staticmethod
-    def random_on_unit_hemisphere(normal: Vec3) -> Vec3:
-        v = Vec3.random_on_unit_sphere()
-        if v @ normal > 0.0:
-            return v
+    def random_on_unit_hemisphere(v: Vec3) -> Vec3:
+        r = Vec3.random_on_unit_sphere()
+        if v @ r > 0.0:
+            return r
         else:
-            return -v
+            return -r
     
     def __neg__(self) -> Vec3:
         return Vec3(-self.x, -self.y, -self.z)
@@ -54,9 +57,12 @@ class Vec3:
 
     def len_squared(self) -> float:
         return self.x * self.x + self.y * self.y + self.z * self.z
-    
+     
     def unit(self) -> Vec3:
         return self / self.len()
+
+    def point(self) -> Point:
+        return Point(self.x, self.y, self.z)
 
 @dataclass
 class Point(Vec3):
@@ -74,3 +80,25 @@ class Ray:
     def at(self, t: float) -> Point:
         return Point.from_(self.direction * t + self.origin)
 
+
+@dataclass
+class Interval:
+    min_: float
+    max_: float
+    
+    @staticmethod
+    def empty() -> Interval:
+        return Interval(float('inf'), float('-inf'))
+
+    @staticmethod
+    def universe() -> Interval:
+        return Interval(float('-inf'), float('inf'))
+
+    def size(self) -> float:
+        return self.max_ - self.min_
+
+    def contains(self, x: float) -> bool:
+        return (x >= self.min_ and x <= self.max_)
+
+    def surrounds(self, x: float) -> float:
+        return (x > self.min_ and x < self.max_)

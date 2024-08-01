@@ -1,27 +1,23 @@
 from PIL import Image as PILImage
+from __future__ import annotations
+from dataclasses import dataclass
 
-""" Simple Color class, supports arithmetic operations.
-"""
+@dataclass
 class Color:
     r: float
     g: float
     b: float
-
-    def __init__(self, r: float, g: float, b: float) -> None:
-        self.r = r
-        self.g = g
-        self.b = b
-    
-    def __add__(self, another: 'Color') -> 'Color':
+ 
+    def __add__(self, another: Color) -> Color:
         return Color(self.r + another.r, self.g + another.g, self.b + another.b)
 
-    def __sub__(self, another: 'Color') -> 'Color':
+    def __sub__(self, another: Color) -> Color:
         return Color(self.r - another.r, self.g - another.g, self.b - another.b)
     
-    def __mul__(self, another: float) -> 'Color':
+    def __mul__(self, another: float) -> Color:
         return Color(self.r * another, self.g * another, self.b * another)
     
-    def __truediv__(self, another: float) -> 'Color':
+    def __truediv__(self, another: float) -> Color:
         return Color(self.r / another, self.g / another, self.b / another)
 
 class Image:
