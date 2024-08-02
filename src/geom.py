@@ -1,5 +1,5 @@
 from __future__ import annotations
-from math import sqrt
+from typing import Tuple
 from dataclasses import dataclass
 import random
 import numpy as np
@@ -49,13 +49,25 @@ class Vec3Array:
     def point_array(self) -> PointArray:
         return PointArray(self.x, self.y, self.z)
 
+    def size(self) -> int:
+        return self.x.size
+    
+    @staticmethod
+    def repeat(p: Tuple[float, float, float], count: int) -> Vec3Array:
+        xs: FloatArray = np.repeat(p[0], count)
+        ys: FloatArray = np.repeat(p[1], count)
+        zs: FloatArray = np.repeat(p[2], count)
+        return Vec3Array(xs, ys, zs)
+
 @dataclass
 class PointArray(Vec3Array):
     """ Invariants:
         * x.ndim == y.ndim == z.ndim == 1
         * x.size == y.size == z.size
-    """      
-    pass
+    """
+    @staticmethod
+    def repeat(p: Tuple[float, float, float], count: int) -> PointArray:
+        return Vec3Array.repeat(p, count).point_array()
 
 
 @dataclass
@@ -72,6 +84,9 @@ class RayArray:
     
     def at(self, t: FloatArray) -> PointArray:
         return (self.direction * t + self.origin).point_array()
+
+    def size(self) -> int:
+        return self.origin.size()
 
 @dataclass
 class Interval:

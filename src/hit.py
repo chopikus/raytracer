@@ -3,7 +3,7 @@ from typing import Optional, Sequence
 from geom import *
 
 @dataclass
-class HitRecord:
+class HitRecordArray:
     p: Point
     normal: Vec3
     t: float

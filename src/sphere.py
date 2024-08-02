@@ -1,25 +1,35 @@
 from dataclasses import dataclass
+from typing import Tuple
 from geom import *
-from hit import *
 import numpy as np
 
-FARAWAY = 1.0e9
-
 @dataclass
-class Sphere(Hittable):
-    center: Point
+class Sphere:
+    center: Tuple[float, float, float] # (x, y, z) tuple instead of Point
     radius: float
     
-    def hit(self, r: Ray) -> float:
-        orig = r.origin
-        dir = r.direction
-        OC = self.center - orig
+    """ Computes hits for multiple rays at the same time.
+    """
+    def hit(self, r: RayArray) -> FloatArray:
+        origins: PointArray = r.origin
+        directions: Vec3Array = r.direction
 
-        A = dir.len_squared()
-        B = -2.0 * (OC @ dir)
-        C = OC.len_squared() - self.radius * self.radius
-        D = B*B - 4*A*C
+        radiuses = np.repeat(self.radius, r.size())
+        centers = PointArray.repeat(self.center, r.size())
+
+        ocs = centers - origins
+
+        type Arr = FloatArray
+        A: Arr = directions.len_squared()
+        B: Arr = -2.0 * (ocs @ directions)
+        C: Arr = ocs.len_squared() - radiuses * radiuses
+        D: Arr = B*B - 4*A*C
         
-        t1: float = np.where(D >= 0, (-B - np.sqrt(D)) / (2 * A), FARAWAY)
-        t2: float = np.where(D >= 0, (-B - np.sqrt(D)) / (2 * A), FARAWAY)
-        return np.where(t1 < t2, t1, t2)
+        t1: Arr = np.where(D >= 0, (-B - np.sqrt(D)) / (2 * A), np.nan)
+        t2: Arr = np.where(D >= 0, (-B + np.sqrt(D)) / (2 * A), np.nan)
+        
+        # np.isnan(t1) == np.isnan(t2) always since the condition is the same
+        choose_t1 = (~np.isnan(t1)) & (t1 <= t2)
+        choose_t2 = (~np.isnan(t1)) & (t1 > t2)
+
+        return np.select([choose_t1, choose_t2], [t1, t2], np.nan) 

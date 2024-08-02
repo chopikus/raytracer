@@ -2,11 +2,13 @@ from __future__ import annotations
 from PIL import Image as PILImage
 from dataclasses import dataclass
 
+type FloatArray = npt.NDArray[np.float64]
+
 @dataclass
 class Color:
-    r: float
-    g: float
-    b: float
+    r: FloatArray
+    g: FloatArray
+    b: FloatArray
  
     def __add__(self, another: Color) -> Color:
         return Color(self.r + another.r, self.g + another.g, self.b + another.b)

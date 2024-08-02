@@ -1,8 +1,6 @@
 from util import *
 from hit import *
 
-FARAWAY = 1.0e9
-
 class Camera:
     image_width: int
     image_height: int
@@ -38,8 +36,7 @@ class Camera:
         if depth <= 0:
             return Color(0.0, 0.0, 0.0)
         
-        
-
+                 
         hr: Optional[HitRecord] = world.hit(r, Interval(0.0001, float('inf')))
         if hr is not None:
             normal = hr.normal
@@ -55,7 +52,8 @@ class Camera:
         return start_color * (1.0 - a) + end_color * a
 
     def render_pixel(self, world: Hittable, x: int, y: int) -> Color:
-        pixel_color = Color(0.0, 0.0, 0.0)
+        ray_colors = np.repeat(Color(0.0, 0.0, 0.0)
+        rays = [] 
 
         for sample in range(self.pixel_samples):
             offset_x = random.uniform(-0.5, 0.5)
@@ -72,10 +70,13 @@ class Camera:
         return pixel_color / self.pixel_samples
 
     def render(self, world: Hittable) -> None:
+        img = PILImage.new('RGB', (self.image_width, self.image_height))
+
         image = Image(self.image_width, self.image_height)
 
         for x in range(self.image_width):
             for y in range(self.image_height):
                 image.set_pixel(x, y, self.render_pixel(world, x, y))
 
-        image.save("output.png")
+
+        img.save("output.png")
