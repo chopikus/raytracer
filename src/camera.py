@@ -69,11 +69,8 @@ class Camera:
 
     def render(self, world: List[Sphere]) -> None:
         ray_count = self.image_height * self.image_width * self.pixel_samples
-        centers = PointArray.repeat(self.center, ray_count)
-        
         x_offsets = np.random.uniform(-0.5, 0.5, ray_count)
         y_offsets = np.random.uniform(-0.5, 0.5, ray_count)
-        p00_repeated = PointArray.repeat(self.p00, ray_count)
 
         """
         Generating xs and ys
@@ -89,11 +86,15 @@ class Camera:
         xs: FloatArray = np.tile(xfirst, self.pixel_samples)
         ys: FloatArray = np.tile(np.arange(self.image_height), self.image_width * self.pixel_samples)
         zs: FloatArray = np.zeros(ray_count)
+
         vecs: Vec3Array = Vec3Array(xs + x_offsets, ys + y_offsets, zs)
         dhs: Vec3Array = Vec3Array.repeat(self.dh, ray_count)
         dvs: Vec3Array = Vec3Array.repeat(self.dv, ray_count)
+
+        p00_repeated = PointArray.repeat(self.p00, ray_count)
         ray_directions = p00_repeated + vecs.mul(dhs + dvs) - centers
 
+        centers = PointArray.repeat(self.center, ray_count)
         rays = RayArray(centers, ray_directions)
         colors = self.render_rays(rays, world)
         print(colors)
