@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import Tuple
 from dataclasses import dataclass
 import random
 import numpy as np
@@ -29,6 +28,9 @@ class Vec3Array:
     def __sub__(self, v: Vec3Array) -> Vec3Array:
         return Vec3Array(self.x - v.x, self.y - v.y, self.z - v.z)
 
+    def mul(self, v: Vec3Array) -> Vec3Array:
+        return Vec3Array(self.x * v.x, self.y * v.y, self.z * v.z)
+    
     def __mul__(self, t: FloatArray) -> Vec3Array:
         return Vec3Array(self.x * t, self.y * t, self.z * t)
 
@@ -62,7 +64,7 @@ class Vec3Array:
         return self.x.size
     
     @staticmethod
-    def repeat(p: Point, count: int) -> Vec3Array:
+    def repeat(p: Vec3, count: int) -> Vec3Array:
         xs: FloatArray = np.repeat(p.x, count)
         ys: FloatArray = np.repeat(p.y, count)
         zs: FloatArray = np.repeat(p.z, count)
@@ -75,9 +77,11 @@ class PointArray(Vec3Array):
         * x.size == y.size == z.size
     """
     @staticmethod
-    def repeat(p: Point, count: int) -> PointArray:
+    def repeat(p: Vec3, count: int) -> PointArray:
         return Vec3Array.repeat(p, count).point_array()
-
+    
+    def __eq__(self, p: object) -> bool:
+        return Vec3Array.__eq__(self, p)
 
 @dataclass
 class RayArray:

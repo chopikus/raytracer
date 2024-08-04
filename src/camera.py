@@ -50,6 +50,7 @@ class Camera:
         return min_hit
 
     def render_rays(self, r: RayArray, world: List[Sphere]) -> FloatArray:
+        print(f"calling render_rays for {r.size()} rays")
         def f(arr: FloatArray) -> FloatArray:
             hit_time, rx, ry, rz = (arr[0], arr[1], arr[2], arr[3])
             a = (ry + 1.0) / 2.0
@@ -66,34 +67,38 @@ class Camera:
         
         return result
 
-    def render_pixel(self, world: List[Sphere], x: int, y: int) -> Color:
-        xs = np.array([])
-        ys = np.array([])
-        zs = np.array([])
-        centers = PointArray.repeat(self.center, self.pixel_samples)
-        
-        for sample in range(self.pixel_samples):
-            offset_x = random.uniform(-0.5, 0.5)
-            offset_y = random.uniform(-0.5, 0.5)
-
-            ray_direction: Vec3 = self.p00 \
-                                  + self.dh * (x + offset_x) \
-                                  + self.dv * (y + offset_y) \
-                                  - self.center
-
-            xs = np.append(xs, ray_direction.x)
-            ys = np.append(ys, ray_direction.y)
-            zs = np.append(zs, ray_direction.z)
-
-        rays_directions = Vec3Array(xs, ys, zs)
-        rays = RayArray(centers, rays_directions)
-        colors = self.render_rays(rays, world)
-
-        colors_summed = np.sum(colors, axis = 1) / self.pixel_samples
-        # print(colors, colors_summed)
-        return Color(colors_summed[0], colors_summed[1], colors_summed[2])
-
     def render(self, world: List[Sphere]) -> None:
+        ray_count = self.image_height * self.image_width * self.pixel_samples
+        centers = PointArray.repeat(self.center, ray_count)
+        
+        x_offsets = np.random.uniform(-0.5, 0.5, ray_count)
+        y_offsets = np.random.uniform(-0.5, 0.5, ray_count)
+        p00_repeated = PointArray.repeat(self.p00, ray_count)
+
+        """
+        Generating xs and ys
+         Example:
+          width = 2
+          height = 3
+          pixel_samples = 2
+          0. xfirst = [0, 0, 0, 1, 1, 1]
+          1. xs = [0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1]
+          2. ys = [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2]
+        """
+        xfirst = np.repeat(np.arange(self.image_width), self.image_height)
+        xs: FloatArray = np.tile(xfirst, self.pixel_samples)
+        ys: FloatArray = np.tile(np.arange(self.image_height), self.image_width * self.pixel_samples)
+        zs: FloatArray = np.zeros(ray_count)
+        vecs: Vec3Array = Vec3Array(xs + x_offsets, ys + y_offsets, zs)
+        dhs: Vec3Array = Vec3Array.repeat(self.dh, ray_count)
+        dvs: Vec3Array = Vec3Array.repeat(self.dv, ray_count)
+        ray_directions = p00_repeated + vecs.mul(dhs + dvs) - centers
+
+        rays = RayArray(centers, ray_directions)
+        colors = self.render_rays(rays, world)
+        print(colors)
+
+        """
         img = Image(self.image_width, self.image_height)
 
         for x in range(self.image_width):
@@ -102,3 +107,5 @@ class Camera:
                 img.set_pixel(x, y, c)
 
         img.save("output.png")
+        """
+        

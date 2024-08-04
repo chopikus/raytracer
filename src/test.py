@@ -1,10 +1,8 @@
 import unittest
-from geom import Vec3Array, Interval
+from geom import *
 import random
 import numpy as np
 import numpy.typing as npt
-
-type FloatArray = npt.NDArray[np.float64]
 
 class TestVec3Array(unittest.TestCase):
     def test_add_matmul(self) -> None:
@@ -41,6 +39,27 @@ class TestVec3Array(unittest.TestCase):
         
         self.assertTrue(v.unit() == w)
 
+
+class TestRay(unittest.TestCase):
+    def test_at(self) -> None:
+        arr = np.array
+        origins: PointArray = PointArray(arr([0.0, 0.0]), #X
+                                         arr([0.0, 0.0]), #Y
+                                         arr([0.0, 0.0])) #Z
+
+        directions: Vec3Array = Vec3Array(arr([1.0, 2.0]), #X
+                                          arr([3.0, 4.0]), #Y
+                                          arr([5.0, 6.0])) #Z
+        
+        ts: FloatArray = arr([100.0, 5.0])
+
+        expected: PointArray = PointArray(arr([100.0, 10.0]),
+                                          arr([300.0, 20.0]),
+                                          arr([500.0, 30.0]))
+        
+        computed: PointArray = RayArray(origins, directions).at(ts)
+        
+        self.assertTrue(expected == computed)
 
 class TestInterval(unittest.TestCase):
     def test_empty_contains(self) -> None:
