@@ -2,4 +2,4 @@
 
 Project in progress!
 
-![Rendered picture](https://github.com/chopikus/raytracer/blob/main/output.png)
+![Rendered picture](https://github.com/chopikus/raytracer/blob/speedup/output.png)
