@@ -1,14 +1,34 @@
 from __future__ import annotations
 from PIL import Image as PILImage
+import numpy.typing as npt
+import numpy as np
 from dataclasses import dataclass
 
 type FloatArray = npt.NDArray[np.float64]
 
 @dataclass
-class Color:
+class ColorArray:
     r: FloatArray
     g: FloatArray
     b: FloatArray
+ 
+    def __add__(self, another: ColorArray) -> ColorArray:
+        return ColorArray(self.r + another.r, self.g + another.g, self.b + another.b)
+
+    def __sub__(self, another: ColorArray) -> ColorArray:
+        return ColorArray(self.r - another.r, self.g - another.g, self.b - another.b)
+    
+    def __mul__(self, another: float) -> ColorArray:
+        return ColorArray(self.r * another, self.g * another, self.b * another)
+    
+    def __truediv__(self, another: float) -> ColorArray:
+        return ColorArray(self.r / another, self.g / another, self.b / another)
+
+@dataclass
+class Color:
+    r: float
+    g: float
+    b: float
  
     def __add__(self, another: Color) -> Color:
         return Color(self.r + another.r, self.g + another.g, self.b + another.b)

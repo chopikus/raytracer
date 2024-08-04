@@ -5,7 +5,7 @@ import numpy as np
 
 @dataclass
 class Sphere:
-    center: Tuple[float, float, float] # (x, y, z) tuple instead of Point
+    center: Point
     radius: float
     
     """ Computes hits for multiple rays at the same time.
@@ -24,12 +24,14 @@ class Sphere:
         B: Arr = -2.0 * (ocs @ directions)
         C: Arr = ocs.len_squared() - radiuses * radiuses
         D: Arr = B*B - 4*A*C
-        
-        t1: Arr = np.where(D >= 0, (-B - np.sqrt(D)) / (2 * A), np.nan)
-        t2: Arr = np.where(D >= 0, (-B + np.sqrt(D)) / (2 * A), np.nan)
-        
+    
+        cond = D >= 0 #BoolArray(fix later)
+        sq = np.sqrt(np.maximum(D, 0))
+        t1: Arr = np.where(cond, (-B - sq) / (2 * A), np.nan)
+        t2: Arr = np.where(cond, (-B + sq) / (2 * A), np.nan)
+
         # np.isnan(t1) == np.isnan(t2) always since the condition is the same
         choose_t1 = (~np.isnan(t1)) & (t1 <= t2)
         choose_t2 = (~np.isnan(t1)) & (t1 > t2)
 
-        return np.select([choose_t1, choose_t2], [t1, t2], np.nan) 
+        return np.select([choose_t1, choose_t2], [t1, t2], np.nan)

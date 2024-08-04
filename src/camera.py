@@ -1,5 +1,8 @@
 from util import *
-from hit import *
+from geom import *
+from sphere import *
+import numpy as np
+from typing import List
 
 class Camera:
     image_width: int
@@ -32,29 +35,43 @@ class Camera:
         viewport_start = (viewport_center - v/2 - h/2).point()
         self.p00 = (viewport_start + (self.dv/2) + (self.dh/2)).point()
 
-    def ray_color(self, r: Ray, world: Hittable, depth: int) -> Color:
-        if depth <= 0:
-            return Color(0.0, 0.0, 0.0)
+    # temporary method
+    def decide_hit(self, rays: RayArray, world: List[Sphere]) -> FloatArray:
+        hits: List[FloatArray] = []
+        for sphere in world:
+            arr = sphere.hit(rays)
+            np.nan_to_num(arr, copy=False, nan=float('inf'))
+            hits.append(arr)
         
-                 
-        hr: Optional[HitRecord] = world.hit(r, Interval(0.0001, float('inf')))
-        if hr is not None:
-            normal = hr.normal
-            return Color(normal.x + 1.0, normal.y + 1.0, normal.z + 1.0) / 2
+        min_hit = hits[0]
+        for i in range(1, len(hits)):
+            min_hit = np.minimum(min_hit, hits[i])
 
-        unit_dir: Vec3 = r.direction.unit()
+        return min_hit
 
-        # unitDir.y can be from -1 to 1.
-        a = (unit_dir.y + 1.0) / 2.0
-        start_color = Color(1.0, 1.0, 1.0)
-        end_color = Color(1.0, 0.0, 0.0)
+    def render_rays(self, r: RayArray, world: List[Sphere]) -> FloatArray:
+        def f(arr: FloatArray) -> FloatArray:
+            hit_time, rx, ry, rz = (arr[0], arr[1], arr[2], arr[3])
+            a = (ry + 1.0) / 2.0
+            start_color = np.array([1.0, 1.0, 1.0])
+            end_color = np.array([0.5, 0.7, 1.0])
+            if hit_time == float('inf'):
+                return start_color * (1.0 - a) + end_color * a
+            return np.array([1.0, 0.0, 0.0])
 
-        return start_color * (1.0 - a) + end_color * a
+        hits: FloatArray = self.decide_hit(r, world)        
+        unit_directions: Vec3Array = r.direction.unit()
+        s = np.vstack((hits, unit_directions.x, unit_directions.y, unit_directions.z))
+        result = np.apply_along_axis(f, 0, s)
+        
+        return result
 
-    def render_pixel(self, world: Hittable, x: int, y: int) -> Color:
-        ray_colors = np.repeat(Color(0.0, 0.0, 0.0)
-        rays = [] 
-
+    def render_pixel(self, world: List[Sphere], x: int, y: int) -> Color:
+        xs = np.array([])
+        ys = np.array([])
+        zs = np.array([])
+        centers = PointArray.repeat(self.center, self.pixel_samples)
+        
         for sample in range(self.pixel_samples):
             offset_x = random.uniform(-0.5, 0.5)
             offset_y = random.uniform(-0.5, 0.5)
@@ -64,19 +81,24 @@ class Camera:
                                   + self.dv * (y + offset_y) \
                                   - self.center
 
-            r = Ray(self.center, ray_direction)
-            pixel_color += self.ray_color(r, world, self.depth)
-        
-        return pixel_color / self.pixel_samples
+            xs = np.append(xs, ray_direction.x)
+            ys = np.append(ys, ray_direction.y)
+            zs = np.append(zs, ray_direction.z)
 
-    def render(self, world: Hittable) -> None:
-        img = PILImage.new('RGB', (self.image_width, self.image_height))
+        rays_directions = Vec3Array(xs, ys, zs)
+        rays = RayArray(centers, rays_directions)
+        colors = self.render_rays(rays, world)
 
-        image = Image(self.image_width, self.image_height)
+        colors_summed = np.sum(colors, axis = 1) / self.pixel_samples
+        # print(colors, colors_summed)
+        return Color(colors_summed[0], colors_summed[1], colors_summed[2])
+
+    def render(self, world: List[Sphere]) -> None:
+        img = Image(self.image_width, self.image_height)
 
         for x in range(self.image_width):
             for y in range(self.image_height):
-                image.set_pixel(x, y, self.render_pixel(world, x, y))
-
+                c = self.render_pixel(world, x, y)
+                img.set_pixel(x, y, c)
 
         img.save("output.png")

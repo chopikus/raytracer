@@ -29,6 +29,19 @@ class TestVec3Array(unittest.TestCase):
         self.assertTrue(v @ w >= 0.0)
     """
 
+    def test_unit(self) -> None:
+        arr = np.array
+        v: Vec3Array = Vec3Array(arr([0.0, 0.0, 3.0, 3.0, 0.0]), #X
+                                 arr([0.0, 2.0, 0.0, 0.0, 5.0]), #Y
+                                 arr([1.0, 0.0, 0.0, 4.0, 0.0])) #Z 
+        
+        w: Vec3Array = Vec3Array(arr([0.0, 0.0, 1.0, 0.6, 0.0]), #X
+                                 arr([0.0, 1.0, 0.0, 0.0, 1.0]), #Y
+                                 arr([1.0, 0.0, 0.0, 0.8, 0.0])) #Z 
+        
+        self.assertTrue(v.unit() == w)
+
+
 class TestInterval(unittest.TestCase):
     def test_empty_contains(self) -> None:
         x = Interval.empty()
