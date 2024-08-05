@@ -26,11 +26,11 @@ class Sphere:
     
         cond = D >= 0 #BoolArray(fix later)
         sq = np.sqrt(np.maximum(D, 0))
-        t1: Arr = np.where(cond, (-B - sq) / (2 * A), np.nan)
-        t2: Arr = np.where(cond, (-B + sq) / (2 * A), np.nan)
+        t1: Arr = np.where(cond, (-B - sq) / (2 * A), np.inf)
+        t2: Arr = np.where(cond, (-B + sq) / (2 * A), np.inf)
 
         # np.isnan(t1) == np.isnan(t2) always since the condition is the same
-        choose_t1 = (~np.isnan(t1)) & (t1 <= t2)
-        choose_t2 = (~np.isnan(t1)) & (t1 > t2)
+        choose_t1 = (~np.isinf(t1)) & (t1 <= t2)
+        choose_t2 = (~np.isinf(t1)) & (t1 > t2)
 
-        return np.select([choose_t1, choose_t2], [t1, t2], np.nan)
+        return np.select([choose_t1, choose_t2], [t1, t2], np.inf)

@@ -4,6 +4,7 @@ import random
 import numpy as np
 import numpy.typing as npt
 import math
+from numba import jit # type: ignore
 
 type FloatArray = npt.NDArray[np.float64]
 
@@ -18,7 +19,7 @@ class Vec3Array:
     x: FloatArray
     y: FloatArray
     z: FloatArray
-   
+    
     def __neg__(self) -> Vec3Array:
         return Vec3Array(-self.x, -self.y, -self.z)
 

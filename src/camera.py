@@ -35,40 +35,29 @@ class Camera:
         viewport_start = (viewport_center - v/2 - h/2).point()
         self.p00 = (viewport_start + (self.dv/2) + (self.dh/2)).point()
 
-    # temporary method
-    def decide_hit(self, rays: RayArray, world: List[Sphere]) -> FloatArray:
-        hits: List[FloatArray] = []
-        for sphere in world:
-            arr = sphere.hit(rays)
-            np.nan_to_num(arr, copy=False, nan=float('inf'))
-            hits.append(arr)
+    def render_rays(self, rays: RayArray, world: List[Sphere]) -> FloatArray:
+        print(f"calling render_rays for {rays.size()} rays")
+
+        hits: FloatArray = np.minimum.reduce([sphere.hit(rays) for sphere in world])      
+        unit_directions: Vec3Array = rays.direction.unit()
+        ry = unit_directions.y
+        a = (ry + 1.0) / 2.0
+        result_size = rays.size()
+
+        # makes result_size columns of (r, g, b)^T
+        column_rep = lambda r,g,b: \
+                   np.tile(np.array([[r, g, b]]).transpose(), (1, result_size))
+
+        bg = column_rep(1.0, 1.0, 1.0) * (1.0 - a) + \
+             column_rep(0.5, 0.7, 1.0) * a
         
-        min_hit = hits[0]
-        for i in range(1, len(hits)):
-            min_hit = np.minimum(min_hit, hits[i])
+        sphere = column_rep(1.0, 0.0, 0.0)
 
-        return min_hit
-
-    def render_rays(self, r: RayArray, world: List[Sphere]) -> FloatArray:
-        print(f"calling render_rays for {r.size()} rays")
-        def f(arr: FloatArray) -> FloatArray:
-            hit_time, rx, ry, rz = (arr[0], arr[1], arr[2], arr[3])
-            a = (ry + 1.0) / 2.0
-            start_color = np.array([1.0, 1.0, 1.0])
-            end_color = np.array([0.5, 0.7, 1.0])
-            if hit_time == float('inf'):
-                return start_color * (1.0 - a) + end_color * a
-            return np.array([1.0, 0.0, 0.0])
-
-        hits: FloatArray = self.decide_hit(r, world)        
-        unit_directions: Vec3Array = r.direction.unit()
-        s = np.vstack((hits, unit_directions.x, unit_directions.y, unit_directions.z))
-        result = np.apply_along_axis(f, 0, s)
-        
-        return result
+        return np.where(hits == np.inf, bg, sphere)
 
     def render(self, world: List[Sphere]) -> None:
         ray_count = self.image_height * self.image_width * self.pixel_samples
+        centers = PointArray.repeat(self.center, ray_count)
         x_offsets = np.random.uniform(-0.5, 0.5, ray_count)
         y_offsets = np.random.uniform(-0.5, 0.5, ray_count)
 
@@ -94,7 +83,6 @@ class Camera:
         p00_repeated = PointArray.repeat(self.p00, ray_count)
         ray_directions = p00_repeated + vecs.mul(dhs + dvs) - centers
 
-        centers = PointArray.repeat(self.center, ray_count)
         rays = RayArray(centers, ray_directions)
         colors = self.render_rays(rays, world)
         print(colors)
