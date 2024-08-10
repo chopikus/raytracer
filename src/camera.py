@@ -93,7 +93,12 @@ class Camera:
 
         print(colors.size, pixel_samples)
         colors_splitted = np.split(colors, pixel_samples, axis=1)
-        return np.add.reduce(colors_splitted) / pixel_samples
+        
+        result = colors_splitted[0]
+        for i in range(1, len(colors_splitted)):
+            result += colors_splitted[i]
+        result /= pixel_samples
+        return result
         
     def render(self, world: List[Sphere]) -> None:
         colors = np.zeros((3, self.image_width * self.image_height))

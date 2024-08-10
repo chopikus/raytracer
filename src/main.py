@@ -8,5 +8,5 @@ if __name__ == '__main__':
     #hittables.append(Sphere(center=Point(0.0, -100.5, -1.0), radius=100.0))
 
     world = hittables
-    camera = Camera(16.0 / 9.0, 1000, 250, 1)
+    camera = Camera(16.0 / 9.0, 400, 10, 1)
     camera.render(world)

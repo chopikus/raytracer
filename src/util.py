@@ -3,6 +3,7 @@ from PIL import Image as PILImage
 import cupy.typing as npt
 import cupy as np
 from dataclasses import dataclass
+from typing import TypeAlias
 
 FloatArray: TypeAlias = npt.NDArray[np.float64]
 
