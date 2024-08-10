@@ -107,7 +107,7 @@ class Camera:
             colors_gpu += self.render_pixels(world, self.samples_one_time)
         colors_gpu /= times
 
-        colors = np.ascupy(colors_gpu)
+        colors = np.asnumpy(colors_gpu)
         
         r = np.reshape(colors[0], (self.image_width, self.image_height)).T * 255
         g = np.reshape(colors[1], (self.image_width, self.image_height)).T * 255
