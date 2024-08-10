@@ -4,7 +4,7 @@
 
 So far this project is in progress, however there are some interesting results to look at.
 
-While researching scientific programming libraries I ended up having 3 different implementations of the ray tracer in Java, Python, Numpy.
+While researching scientific programming libraries I ended up having 4 different implementations of the ray tracer in Java, Python, Numpy.
 
 ## Benchmarking
 
