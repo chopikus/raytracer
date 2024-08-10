@@ -14,7 +14,7 @@ class Sphere:
         origins: PointArray = r.origin
         directions: Vec3Array = r.direction
 
-        radiuses = np.repeat(self.radius, r.size())
+        radiuses = np.tile(self.radius, r.size())
         centers = PointArray.repeat(self.center, r.size())
 
         ocs = centers - origins

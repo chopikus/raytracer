@@ -66,9 +66,9 @@ class Vec3Array:
     
     @staticmethod
     def repeat(p: Vec3, count: int) -> Vec3Array:
-        xs: FloatArray = np.repeat(p.x, count)
-        ys: FloatArray = np.repeat(p.y, count)
-        zs: FloatArray = np.repeat(p.z, count)
+        xs: FloatArray = np.tile(p.x, count)
+        ys: FloatArray = np.tile(p.y, count)
+        zs: FloatArray = np.tile(p.z, count)
         return Vec3Array(xs, ys, zs)
 
 @dataclass
