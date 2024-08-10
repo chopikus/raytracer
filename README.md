@@ -37,17 +37,14 @@ VM running Ubuntu 22.04
 
 Rendering Pic1:
 
-Python implementation: real	0m42.393s user	0m42.371s sys	0m0.020s 
-Command: `time (python3 src/main.py)`
-
-Python implementation (Pypy): real	0m2.382s user	0m2.271s sys	0m0.105s
-Command: `time (./pypy3.10-v7.3.16-linux64/bin/pypy3.10 raytracer/src/main.py)
-
-Java implementation: real	0m1.016s user	0m1.694s sys	0m0.323s
-Command: `time (java -jar target/raytracer-1.0-SNAPSHOT.jar)`
-
+|Implementation|CPU Time|"Result of `time` command   |Command   |Branch|
+|---|---|---|---|---|
+|Python   |**42.371s**|`real	0m42.393s user	0m42.371s sys	0m0.020s`   |`time (python3 src/main.py)`   |`main`|
+|Python (Pypy)|**2.271s**|`real	0m2.382s user	0m2.271s sys	0m0.105s`   |`time (./pypy3.10-v7.3.16-linux64/bin/pypy3.10 raytracer/src/main.py)`   |`main`|
+|Java|**1.694s**|`real	0m1.016s user	0m1.694s sys	0m0.323s`   |`time (java -jar target/raytracer-1.0-SNAPSHOT.jar)`   |`java-impl`|
 
 Rendering Pic2:
-Numpy implementation: real	0m1.331s user	0m2.182s sys	0m0.194s
-Command: `time (python3 src/main.py)`
+|Implementation|CPU Time|"Result of `time` command   |Command   |Branch|
+|---|---|---|---|---|
+|Python (Numpy)|0m2.182s|`real	0m1.331s user	0m2.182s sys	0m0.194s`|`time (python3 src/main.py)`|`speedup`|
 
