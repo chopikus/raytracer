@@ -31,7 +31,8 @@ GPU: GTX 1070
 VM running Ubuntu 22.04
 
 `python3 --version`: `Python 3.10.12`
-`java -version`: openjdk version "21.0.4" 2024-07-16, OpenJDK Runtime Environment (build 21.0.4+7-Ubuntu-1ubuntu222.04), OpenJDK 64-Bit Server VM (build 21.0.4+7-Ubuntu-1ubuntu222.04, mixed mode, sharing)
+
+`java -version`: `openjdk version "21.0.4" 2024-07-16, OpenJDK Runtime Environment (build 21.0.4+7-Ubuntu-1ubuntu222.04), OpenJDK 64-Bit Server VM (build 21.0.4+7-Ubuntu-1ubuntu222.04, mixed mode, sharing)`
 
 ### Results
 
