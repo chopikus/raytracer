@@ -40,7 +40,10 @@ class Camera:
     def render_rays(self, rays: RayArray, world: List[Sphere]) -> FloatArray:
         print(f"calling render_rays for {rays.size()} rays")
 
-        hits: FloatArray = np.minimum.reduce([sphere.hit(rays) for sphere in world])      
+        hits: FloatArray = world[0].hit(rays)
+        for i in range(1, len(world)):
+            hits = np.minimum(hits, world[i].hit(rays))
+        
         unit_directions: Vec3Array = rays.direction.unit()
         ry = unit_directions.y
         a = (ry + 1.0) / 2.0
