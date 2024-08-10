@@ -12,13 +12,13 @@ One of the implementations produces a simpler image than the other ones.
 
 ### Pic1
 
-*picture*
+![Rendered picture](https://github.com/chopikus/raytracer/blob/main/pic1.png)
 
 Size: 400x225, two spheres with 50% diffusion and red gradient background.
 
 ### Pic2
 
-*picture*
+![Rendered picture](https://github.com/chopikus/raytracer/blob/main/piс2.png)
 
 Size: 400x225, one red sphere without diffusion or computation of normal vector.
 
