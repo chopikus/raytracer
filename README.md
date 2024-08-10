@@ -46,5 +46,5 @@ Rendering Pic1:
 Rendering Pic2:
 |Implementation|CPU Time|"Result of `time` command   |Command   |Branch|
 |---|---|---|---|---|
-|Python (Numpy)|0m2.182s|`real	0m1.331s user	0m2.182s sys	0m0.194s`|`time (python3 src/main.py)`|`speedup`|
+|Python (Numpy)|**2.182s**|`real	0m1.331s user	0m2.182s sys	0m0.194s`|`time (python3 src/main.py)`|`speedup`|
 
