@@ -101,18 +101,20 @@ class Camera:
         return result
         
     def render(self, world: List[Sphere]) -> None:
-        colors = np.zeros((3, self.image_width * self.image_height))
+        colors_gpu = np.zeros((3, self.image_width * self.image_height))
         times = self.pixel_samples // self.samples_one_time
         for _ in range(times):
-            colors += self.render_pixels(world, self.samples_one_time)
-        colors /= times
+            colors_gpu += self.render_pixels(world, self.samples_one_time)
+        colors_gpu /= times
+
+        colors = np.asnumpy(colors_gpu)
 
         img = Image(self.image_width, self.image_height)
 
         i: int = 0
         for x in range(self.image_width):
             for y in range(self.image_height):
-                c = Color(colors[0][i], colors[1][i], colors[2][i])
+                c = Color(colors_gpu[0][i], colors_gpu[1][i], colors_gpu[2][i])
                 img.set_pixel(x, y, c)
                 i += 1
 
