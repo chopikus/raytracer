@@ -14,13 +14,21 @@ One of the implementations produces a simpler image than the other ones.
 
 ![Rendered picture](https://github.com/chopikus/raytracer/blob/main/pic1.png)
 
-Size: 400x225, two spheres with 50% diffusion and red gradient background.
+Size: 400x225, two spheres with 50% diffusion and red gradient background, rendered with 10 samples per pixel.
 
 ### Pic2
 
 ![Rendered picture](https://github.com/chopikus/raytracer/blob/main/pic2.png)
 
-Size: 400x225, one red sphere without diffusion or computation of normal vector.
+Size: 400x225, one red sphere without diffusion or computation of normal vector, rendered with 10 samples per pixel.
+
+
+### Pic3
+
+![Rendered picture](https://github.com/chopikus/raytracer/blob/main/pic3.png)
+
+Size: 1000x562, one red sphere without diffusion or computation of normal vector, rendered with 240 samples per pixel.
+
 
 ### Hardware, OS
 
@@ -48,4 +56,9 @@ Rendering Pic2:
 |Implementation|CPU Time|Result of `time` command   |Command   |Branch|
 |---|---|---|---|---|
 |Python (Numpy)|**2.182s**|`real	0m1.331s user	0m2.182s sys	0m0.194s`|`time (python3 src/main.py)`|`speedup`|
+
+Rendering Pic3:
+|Implementation|CPU Time|Result of `time` command   |Command   |Branch|
+|---|---|---|---|---|
+|Python (cupy) (**On GPU**)|**1.723s**|`real	0m2.658s user	0m1.723s sys	0m1.909s`|`time (python3 src/main.py)`|`cupy-speedup`|
 
