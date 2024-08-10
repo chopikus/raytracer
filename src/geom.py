@@ -4,9 +4,9 @@ import random
 import numpy as np
 import numpy.typing as npt
 import math
-from numba import jit # type: ignore
+from typing import TypeAlias
 
-type FloatArray = npt.NDArray[np.float64]
+FloatArray: TypeAlias = npt.NDArray[np.float64]
 
 """ Class for operating on a bunch of vectors at the same time.
 """

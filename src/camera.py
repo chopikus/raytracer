@@ -3,7 +3,6 @@ from geom import *
 from sphere import *
 import numpy as np
 from typing import List
-from numba import jit
 
 class Camera:
     image_width: int

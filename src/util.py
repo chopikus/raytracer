@@ -4,7 +4,7 @@ import numpy.typing as npt
 import numpy as np
 from dataclasses import dataclass
 
-type FloatArray = npt.NDArray[np.float64]
+FloatArray: TypeAlias = npt.NDArray[np.float64]
 
 @dataclass
 class ColorArray:

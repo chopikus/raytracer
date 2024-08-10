@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from geom import *
 import numpy as np
+from typing import TypeAlias
 
 @dataclass
 class Sphere:
@@ -18,7 +19,7 @@ class Sphere:
 
         ocs = centers - origins
 
-        type Arr = FloatArray
+        Arr: TypeAlias = FloatArray
         A: Arr = directions.len_squared()
         B: Arr = -2.0 * (ocs @ directions)
         C: Arr = ocs.len_squared() - radiuses * radiuses
