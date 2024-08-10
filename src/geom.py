@@ -4,13 +4,19 @@ import random
 import numpy as np
 import numpy.typing as npt
 import math
-from numba import jit # type: ignore
+from numba.experimental import jitclass # type: ignore
+from numba import jit, float64 # type: ignore
 
 type FloatArray = npt.NDArray[np.float64]
 
 """ Class for operating on a bunch of vectors at the same time.
 """
-@dataclass
+
+@jitclass([
+    ('x', float64[:]),
+    ('y', float64[:]),
+    ('z', float64[:]),
+])
 class Vec3Array:
     """ Invariants:
         * x.ndim == y.ndim == z.ndim == 1
@@ -19,7 +25,12 @@ class Vec3Array:
     x: FloatArray
     y: FloatArray
     z: FloatArray
-    
+
+    def __init__(self, x: FloatArray, y: FloatArray, z: FloatArray) -> None:
+        self.x = x
+        self.y = y
+        self.z = z
+
     def __neg__(self) -> Vec3Array:
         return Vec3Array(-self.x, -self.y, -self.z)
 
@@ -58,33 +69,19 @@ class Vec3Array:
     def unit(self) -> Vec3Array:
         return self / self.len()
 
-    def point_array(self) -> PointArray:
-        return PointArray(self.x, self.y, self.z)
-
     def size(self) -> int:
         return self.x.size
-    
-    @staticmethod
-    def repeat(p: Vec3, count: int) -> Vec3Array:
-        xs: FloatArray = np.repeat(p.x, count)
-        ys: FloatArray = np.repeat(p.y, count)
-        zs: FloatArray = np.repeat(p.z, count)
-        return Vec3Array(xs, ys, zs)
 
-@dataclass
-class PointArray(Vec3Array):
-    """ Invariants:
-        * x.ndim == y.ndim == z.ndim == 1
-        * x.size == y.size == z.size
-    """
-    @staticmethod
-    def repeat(p: Vec3, count: int) -> PointArray:
-        return Vec3Array.repeat(p, count).point_array()
-    
-    def __eq__(self, p: object) -> bool:
-        return Vec3Array.__eq__(self, p)
+@jit
+def Vec3Array_repeat(p: Vec3, count: int) -> Vec3Array:
+    xs: FloatArray = np.repeat(p.x, count)
+    ys: FloatArray = np.repeat(p.y, count)
+    zs: FloatArray = np.repeat(p.z, count)
+    return Vec3Array(xs, ys, zs)
 
-@dataclass
+type PointArray = Vec3Array
+
+@jitclass
 class RayArray:
     """ Invariants:
         * origin.x.size == direction.x.size
@@ -93,11 +90,15 @@ class RayArray:
         * PointArray invariants for origin
         * Vec3Array invariants for direction
     """
-    origin: PointArray
+    origin: Vec3Array #actually a PointArray
     direction: Vec3Array
     
+    def __init__(self, origin: PointArray, direction: Vec3Array) -> None:
+        self.origin = origin
+        self.direction = direction
+
     def at(self, t: FloatArray) -> PointArray:
-        return (self.direction * t + self.origin).point_array()
+        return (self.direction * t + self.origin)
 
     def size(self) -> int:
         return self.origin.size()
@@ -124,11 +125,20 @@ class Interval:
     def surrounds(self, x: float) -> float:
         return (x > self.min_ and x < self.max_)
 
-@dataclass
+@jitclass([
+    ('x', float64),
+    ('y', float64),
+    ('z', float64),
+])
 class Vec3:
-    x: float = 0.0
-    y: float = 0.0
-    z: float = 0.0
+    x: float
+    y: float
+    z: float
+
+    def __init__(self, x: float, y: float, z: float) -> None:
+        self.x = x
+        self.y = y
+        self.z = z
 
     """Returns the uniformly distributed vector on a unit sphere.
        The returned vector is a unit vector.
@@ -181,14 +191,5 @@ class Vec3:
      
     def unit(self) -> Vec3:
         return self / self.len()
-
-    def point(self) -> Point:
-        return Point(self.x, self.y, self.z)
-
-@dataclass
-class Point(Vec3):
-    pass
-
-    @staticmethod
-    def from_(v: Vec3) -> Point:
-        return Point(v.x, v.y, v.z)
+    
+type Point = Vec3

@@ -1,12 +1,17 @@
 from dataclasses import dataclass
 from geom import *
 import numpy as np
+from numba import jit # type: ignore
 
-@dataclass
+@jitclass
 class Sphere:
-    center: Point
+    center: Vec3 # actually point
     radius: float
     
+    def __init__(self, center: Point, radius: float) -> None:
+        self.center = center
+        self.radius = radius
+
     """ Computes hits for multiple rays at the same time.
     """
     def hit(self, r: RayArray) -> FloatArray:
@@ -14,7 +19,7 @@ class Sphere:
         directions: Vec3Array = r.direction
 
         radiuses = np.repeat(self.radius, r.size())
-        centers = PointArray.repeat(self.center, r.size())
+        centers: PointArray = Vec3Array_repeat(self.center, r.size())
 
         ocs = centers - origins
 

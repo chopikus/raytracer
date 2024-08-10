@@ -43,7 +43,7 @@ class TestVec3Array(unittest.TestCase):
 class TestRay(unittest.TestCase):
     def test_at(self) -> None:
         arr = np.array
-        origins: PointArray = PointArray(arr([0.0, 0.0]), #X
+        origins: PointArray = Vec3Array(arr([0.0, 0.0]), #X
                                          arr([0.0, 0.0]), #Y
                                          arr([0.0, 0.0])) #Z
 
@@ -53,7 +53,7 @@ class TestRay(unittest.TestCase):
         
         ts: FloatArray = arr([100.0, 5.0])
 
-        expected: PointArray = PointArray(arr([100.0, 10.0]),
+        expected: PointArray = Vec3Array(arr([100.0, 10.0]),
                                           arr([300.0, 20.0]),
                                           arr([500.0, 30.0]))
         
