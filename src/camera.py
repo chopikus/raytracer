@@ -3,6 +3,7 @@ from geom import *
 from sphere import *
 import cupy as np
 from typing import List
+from PIL import Image as PilImage
 
 class Camera:
     image_width: int
@@ -91,7 +92,6 @@ class Camera:
         rays = RayArray(centers, ray_directions)
         colors = self.render_rays(rays, world)
 
-        print(colors.size, pixel_samples)
         colors_splitted = np.split(colors, pixel_samples, axis=1)
         
         result = colors_splitted[0]
@@ -107,15 +107,13 @@ class Camera:
             colors_gpu += self.render_pixels(world, self.samples_one_time)
         colors_gpu /= times
 
-        colors = np.asnumpy(colors_gpu)
+        colors = np.ascupy(colors_gpu)
+        
+        r = np.reshape(colors[0], (self.image_width, self.image_height)).T * 255
+        g = np.reshape(colors[1], (self.image_width, self.image_height)).T * 255
+        b = np.reshape(colors[2], (self.image_width, self.image_height)).T * 255
+        
+        conv = lambda x: PilImage.fromarray(x).convert('L')
 
-        img = Image(self.image_width, self.image_height)
-
-        i: int = 0
-        for x in range(self.image_width):
-            for y in range(self.image_height):
-                c = Color(colors_gpu[0][i], colors_gpu[1][i], colors_gpu[2][i])
-                img.set_pixel(x, y, c)
-                i += 1
-
-        img.save("output.png")
+        image_output = PilImage.merge("RGB", (conv(r), conv(g), conv(b)))
+        image_output.save("output.png")
