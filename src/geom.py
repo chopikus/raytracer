@@ -1,8 +1,8 @@
 from __future__ import annotations
 from dataclasses import dataclass
 import random
-import numpy as np
-import numpy.typing as npt
+import cupy as np
+import cupy.typing as npt
 import math
 from typing import TypeAlias
 

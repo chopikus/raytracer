@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from geom import *
-import numpy as np
+import cupy as np
 from typing import TypeAlias
 
 @dataclass

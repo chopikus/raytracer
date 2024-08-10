@@ -1,7 +1,7 @@
 from util import *
 from geom import *
 from sphere import *
-import numpy as np
+import cupy as np
 from typing import List
 
 class Camera:

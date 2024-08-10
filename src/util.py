@@ -1,7 +1,7 @@
 from __future__ import annotations
 from PIL import Image as PILImage
-import numpy.typing as npt
-import numpy as np
+import cupy.typing as npt
+import cupy as np
 from dataclasses import dataclass
 
 FloatArray: TypeAlias = npt.NDArray[np.float64]

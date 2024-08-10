@@ -1,8 +1,8 @@
 import unittest
 from geom import *
 import random
-import numpy as np
-import numpy.typing as npt
+import cupy as np
+import cupy.typing as npt
 
 class TestVec3Array(unittest.TestCase):
     def test_add_matmul(self) -> None:
