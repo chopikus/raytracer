@@ -62,3 +62,4 @@ Rendering Pic3:
 |---|---|---|---|---|
 |Python (cupy) (**On GPU**)|**1.723s**|`real	0m2.658s user	0m1.723s sys	0m1.909s`|`time (python3 src/main.py)`|`cupy-speedup`|
 
+Estimating conservatively, rendering on GPU is ~25 times faster than default python implementation!
