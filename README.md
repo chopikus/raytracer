@@ -46,20 +46,32 @@ VM running Ubuntu 22.04
 
 Rendering Pic1:
 
-|Implementation|CPU Time|Result of `time` command   |Command   |Branch|
+|Implementation|Real Time|Result of `time` command   |Command   |Branch|
 |---|---|---|---|---|
-|Python   |**42.371s**|`real	0m42.393s user	0m42.371s sys	0m0.020s`   |`time (python3 src/main.py)`   |`main`|
-|Python (Pypy)|**2.271s**|`real	0m2.382s user	0m2.271s sys	0m0.105s`   |`time (./pypy3.10-v7.3.16-linux64/bin/pypy3.10 raytracer/src/main.py)`   |`main`|
-|Java|**1.694s**|`real	0m1.016s user	0m1.694s sys	0m0.323s`   |`time (java -jar target/raytracer-1.0-SNAPSHOT.jar)`   |`java-impl`|
+|Python   |**42.393s**|`real	0m42.393s user	0m42.371s sys	0m0.020s`   |`time (python3 src/main.py)`   |`main`|
+|Python (Pypy)|**2.382s**|`real	0m2.382s user	0m2.271s sys	0m0.105s`   |`time (./pypy3.10-v7.3.16-linux64/bin/pypy3.10 raytracer/src/main.py)`   |`main`|
+|Java|**1.016s**|`real	0m1.016s user	0m1.694s sys	0m0.323s`   |`time (java -jar target/raytracer-1.0-SNAPSHOT.jar)`   |`java-impl`|
 
 Rendering Pic2:
-|Implementation|CPU Time|Result of `time` command   |Command   |Branch|
+|Implementation|Real Time|Result of `time` command   |Command   |Branch|
 |---|---|---|---|---|
-|Python (Numpy)|**2.182s**|`real	0m1.331s user	0m2.182s sys	0m0.194s`|`time (python3 src/main.py)`|`speedup`|
+|Python (Numpy)|**1.331s**|`real	0m1.331s user	0m2.182s sys	0m0.194s`|`time (python3 src/main.py)`|`speedup`|
 
 Rendering Pic3:
 |Implementation|CPU Time|Result of `time` command   |Command   |Branch|
 |---|---|---|---|---|
-|Python (cupy) (**On GPU**)|**1.723s**|`real	0m2.658s user	0m1.723s sys	0m1.909s`|`time (python3 src/main.py)`|`cupy-speedup`|
+|Python (cupy) (**On GPU**)|**2.658s**|`real	0m2.658s user	0m1.723s sys	0m1.909s`|`time (python3 src/main.py)`|`cupy-speedup`|
 
-Estimating conservatively, rendering on GPU is ~25 times faster than default python implementation!
+## Estimates
+
+Assuming that Pic1 and Pic2 take roughly the same time to render for the same implementation.
+
+(Rendering each pixel takes more calculations/function calls for diffused spheres however the resolution is lower)
+
+ALso note that Pic3 has 24 times more pixel samples than Pic1/Pic2.
+
+Estimating on real time, rendering on GPU is roughly ~380 times faster than default python implementation, and ~12 times faster than numpy implementation!
+
+## Future
+
+TODO Benchmark rendering the same picture for all 5 implementations.
