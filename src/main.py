@@ -11,7 +11,7 @@ def main_func() -> None:
 
     #world = hittables
     camera = Camera(16.0 / 9.0, 1000, 250, 1)
-    camera.render(Sphere(center=Vec3(0.0, 0.0, -1.0), radius=0.5))
+    camera.render(Sphere(Vec3(0.0, 0.0, -1.0), 0.5))
 
 if __name__ == '__main__':
     main_func()

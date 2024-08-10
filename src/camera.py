@@ -41,12 +41,14 @@ class Camera:
     def render_rays(self, rays: RayArray, sphere: Sphere) -> FloatArray:
         print(f"calling render_rays for {rays.size()} rays")
 
-        hits: FloatArray = np.minimum.reduce(sphere.hit(rays))
-        unit_directions: Vec3Array = rays.direction.unit()
-        ry = unit_directions.y
-        a = (ry + 1.0) / 2.0
-        result_size = rays.size()
 
+        hits: FloatArray = sphere.hit(rays)#np.minimum.reduce(sphere.hit(rays))
+        #unit_directions: Vec3Array = rays.direction #rays.direction.unit()
+        #ry = unit_directions.y
+        #a = (ry + 1.0) / 2.0
+        #result_size = rays.size()
+
+        """
         # makes result_size columns of (r, g, b)^T
         column_rep = lambda r,g,b: np.array([r, g, b]) \
                                      .repeat(result_size) \
@@ -58,6 +60,8 @@ class Camera:
         red = column_rep(1.0, 0.0, 0.0)
 
         return np.where(hits == np.inf, bg, red)
+        """
+        return np.array([0.0])
 
     def render_pixels(self, sphere: Sphere, pixel_samples: int) -> FloatArray:
         ray_count = self.image_height * self.image_width * pixel_samples
@@ -94,16 +98,18 @@ class Camera:
 
         rays = RayArray(centers, ray_directions)
         colors = self.render_rays(rays, sphere)
-
-        print(colors.size, pixel_samples)
+        #colors = np.zeros(pixel_samples)
         colors_splitted = np.split(colors, pixel_samples, axis=1)
-        return np.add.reduce(colors_splitted) / pixel_samples
+        #print(colors_splitted)
+        #return np.add.reduce(colors_splitted) / pixel_samples
+        return colors_splitted[0] / pixel_samples
+        # return np.array([0.0])
         
     def render(self, sphere: Sphere) -> None:
-        colors = np.zeros((3, self.image_width * self.image_height))
+        colors: FloatArray = np.zeros((3, self.image_width * self.image_height))
         times = self.pixel_samples // self.samples_one_time
-        #for _ in range(times):
-        #    colors += self.render_pixels(sphere, self.samples_one_time)
+        for _ in range(times):
+            colors += self.render_pixels(sphere, self.samples_one_time)
         colors /= times
 
         """

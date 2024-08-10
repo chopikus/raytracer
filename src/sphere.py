@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from geom import *
 import numpy as np
-from numba import jit # type: ignore
+import numba as nb # type: ignore
 
-@jitclass
+@nb.experimental.jitclass
 class Sphere:
     center: Vec3 # actually point
     radius: float
@@ -23,7 +23,7 @@ class Sphere:
 
         ocs = centers - origins
 
-        type Arr = FloatArray
+        Arr: TypeAlias = FloatArray
         A: Arr = directions.len_squared()
         B: Arr = -2.0 * (ocs @ directions)
         C: Arr = ocs.len_squared() - radiuses * radiuses

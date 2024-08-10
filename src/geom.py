@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from typing import TypeAlias
 import random
 import numpy as np
 import numpy.typing as npt
@@ -7,7 +8,8 @@ import math
 from numba.experimental import jitclass # type: ignore
 from numba import jit, float64 # type: ignore
 
-type FloatArray = npt.NDArray[np.float64]
+FloatArray: TypeAlias = npt.NDArray[np.float64]
+
 
 """ Class for operating on a bunch of vectors at the same time.
 """
@@ -54,7 +56,7 @@ class Vec3Array:
     
     def __eq__(self, v: object) -> bool:
         if not isinstance(v, Vec3Array):
-            return NotImplemented
+            return False
         
         return np.allclose(self.x, v.x) \
            and np.allclose(self.y, v.y) \
@@ -79,7 +81,7 @@ def Vec3Array_repeat(p: Vec3, count: int) -> Vec3Array:
     zs: FloatArray = np.repeat(p.z, count)
     return Vec3Array(xs, ys, zs)
 
-type PointArray = Vec3Array
+PointArray: TypeAlias = Vec3Array
 
 @jitclass
 class RayArray:
@@ -191,5 +193,5 @@ class Vec3:
      
     def unit(self) -> Vec3:
         return self / self.len()
-    
-type Point = Vec3
+
+Point: TypeAlias = Vec3
