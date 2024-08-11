@@ -2,7 +2,7 @@
 
 (based on 'Raytracing in one weekend')
 
-While researching scientific programming libraries I ended up a lot of different implementations of the ray tracer in Java, Python, Numpy, Cupy.
+While researching scientific programming libraries I ended up with a bunch of different implementations of the ray tracer in Java, Python, Numpy, Cupy.
 
 Every rendering is done on CPU except for cupy implementation.
 
