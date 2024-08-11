@@ -8,7 +8,7 @@ While researching scientific programming libraries I ended up having 4 different
 
 ## Benchmarking
 
-One of the implementations produces a simpler image than the other ones.
+Every rendering is done on CPU except for cupy implementation.
 
 ### Pic1
 
@@ -65,17 +65,7 @@ Rendering Pic3:
 |---|---|---|---|---|
 |Python (cupy) (**On GPU**)|**2.658s**|`real	0m2.658s user	0m1.723s sys	0m1.909s`|`time (python3 src/main.py)`|`cupy-speedup`|
 |Python (numpy)|**48.923s**|`real	0m48.923s user	0m34.417s sys	0m15.646s`|`time (python3 src/main.py)`|`speedup`|
-|Java|**18.256s**|`real	0m18.256s user	0m17.582s sys	0m1.565s|`time (java -jar target/raytracer-1.0-SNAPSHOT.jar)`|`java-simple-impl`|
-
-## Estimates
-
-Assuming that Pic1 and Pic2 take roughly the same time to render for the same implementation.
-
-(Rendering each pixel takes more calculations/function calls for diffused spheres however the resolution is lower)
-
-ALso note that Pic3 has 24 times more pixel samples than Pic1/Pic2.
-
-Estimating on real time, rendering on GPU is roughly ~380 times faster than default python implementation, and ~12 times faster than numpy implementation!
+|Java|**18.256s**|`real	0m18.256s user	0m17.582s sys	0m1.565s`|`time (java -jar target/raytracer-1.0-SNAPSHOT.jar)`|`java-simple-impl`|
 
 ## Future
 
