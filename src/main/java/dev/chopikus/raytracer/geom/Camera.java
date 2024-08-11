@@ -57,20 +57,15 @@ public class Camera {
         Optional<HitRecord> hr = world.hit(r, new Interval(0.001, Double.POSITIVE_INFINITY));
         
         if (hr.isPresent()) {
-            var normal = hr.get().normal();
-            var randomVector = Vec3.randomOnUnitHemisphere(random, normal);
-            
-            return rayColor(new Ray(hr.get().p(), randomVector), world, depth-1)
-                    .divide(2.0);
-            /*return new Color(normal.x + 1.0, normal.y + 1.0, normal.z + 1.0)
-                       .divide(2.0);*/
+            return new Color(1.0, 0.0, 0.0);
         }
 
         Vec3 unitDir = r.direction().unit();
         /* unitDir.y() can be from -1 to 1. */
         var a = (unitDir.y + 1.0) / 2.0;
+
         var startColor = new Color(1.0, 1.0, 1.0);
-        var endColor = new Color(1.0, 0.0, 0.0);
+        var endColor = new Color(0.5, 0.7, 1.0);
 
         return startColor
                .multiply(1.0 - a)
