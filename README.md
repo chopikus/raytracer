@@ -36,6 +36,8 @@ CPU: Xeon® E5-2620 v2
 
 GPU: GTX 1070
 
+RAM: 32Gb
+
 VM running Ubuntu 22.04
 
 `python3 --version`: `Python 3.10.12`
