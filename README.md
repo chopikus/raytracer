@@ -70,4 +70,4 @@ Rendering Pic3:
 
 ## Future
 
-TODO Benchmark rendering the same picture for all 5 implementations.
+TODO Benchmark rendering the same picture for all implementations.
