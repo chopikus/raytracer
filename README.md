@@ -58,12 +58,14 @@ Rendering Pic2:
 |Implementation|Real Time|Result of `time` command   |Command   |Branch|
 |---|---|---|---|---|
 |Python (Numpy)|**1.331s**|`real	0m1.331s user	0m2.182s sys	0m0.194s`|`time (python3 src/main.py)`|`speedup`|
+|Java|**0.552s**|`real	0m0.552s user	0m0.810s sys	0m0.167s`|`time (java -jar target/raytracer-1.0-SNAPSHOT.jar)|`java-simple-impl`|
 
 Rendering Pic3:
 |Implementation|Real Time|Result of `time` command   |Command   |Branch|
 |---|---|---|---|---|
 |Python (cupy) (**On GPU**)|**2.658s**|`real	0m2.658s user	0m1.723s sys	0m1.909s`|`time (python3 src/main.py)`|`cupy-speedup`|
 |Python (numpy)|**48.923s**|`real	0m48.923s user	0m34.417s sys	0m15.646s`|`time (python3 src/main.py)`|`speedup`|
+|Java|**18.256s**|`real	0m18.256s user	0m17.582s sys	0m1.565s|`time (java -jar target/raytracer-1.0-SNAPSHOT.jar)`|`java-simple-impl`|
 
 ## Estimates
 
