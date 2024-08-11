@@ -38,19 +38,14 @@ class Camera:
 
         hr: Optional[HitRecord] = world.hit(r, Interval(0.0001, float('inf')))
         if hr is not None:
-            normal = hr.normal
-            random_vector = Vec3.random_on_unit_hemisphere(normal)
-            
-            return self.ray_color(Ray(hr.p, random_vector), world, depth - 1) \
-                   * 1/2
-            # return 1/2 * Color(normal.x + 1.0, normal.y + 1.0, normal.z + 1.0)
+            return Color(1.0, 0.0, 0.0)
 
         unit_dir: Vec3 = r.direction.unit()
 
         # unitDir.y can be from -1 to 1.
         a = (unit_dir.y + 1.0) / 2.0
         start_color = Color(1.0, 1.0, 1.0)
-        end_color = Color(1.0, 0.0, 0.0)
+        end_color = Color(0.5, 0.7, 1.0)
 
         return start_color * (1.0 - a) + end_color * a
 
