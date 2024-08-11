@@ -64,9 +64,10 @@ Rendering Pic2:
 Rendering Pic3:
 |Implementation|Real Time|Result of `time` command   |Command   |Branch|
 |---|---|---|---|---|
-|Python (cupy) (**On GPU**)|**2.658s**|`real	0m2.658s user	0m1.723s sys	0m1.909s`|`time (python3 src/main.py)`|`cupy-speedup`|
+|Python|**2641.102s**|`real	44m1.102s user 44m1.853s sys	0m0.137s`|`time (python3 src/main.py)`|`python-simple-impl`|
 |Python (numpy)|**48.923s**|`real	0m48.923s user	0m34.417s sys	0m15.646s`|`time (python3 src/main.py)`|`speedup`|
 |Java|**18.256s**|`real	0m18.256s user	0m17.582s sys	0m1.565s`|`time (java -jar target/raytracer-1.0-SNAPSHOT.jar)`|`java-simple-impl`|
+|Python (cupy) (**On GPU**)|**2.658s**|`real	0m2.658s user	0m1.723s sys	0m1.909s`|`time (python3 src/main.py)`|`cupy-speedup`|
 
 ## Future
 
